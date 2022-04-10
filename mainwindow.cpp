@@ -407,7 +407,7 @@ void MainWindow::SavePatientFile(wxCommandEvent &event){
 
 	if(!success){
 		wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for writing!"),wxT("Failure!"));
-		unableToAccessFile.Show();
+		unableToAccessFile.ShowModal();
 	}
 
 }
@@ -425,7 +425,7 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 
 	if(!success){
 		wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for reading!"),wxT("Failure!"));
-		unableToAccessFile.Show();
+		unableToAccessFile.ShowModal();
 	}else{
 		*patients=*temp;
 		cout<<patients->Patients().size()<<endl;
