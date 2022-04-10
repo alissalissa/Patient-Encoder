@@ -230,6 +230,8 @@ bool PList::printToFile(string fp){
 
 bool PList::readFromFile(string fp){
 
+    cout<<"Entering readFromFile()"<<endl;
+
     //Ensure that we're reading to an empty object
     patients.clear();
     groups.clear();
@@ -337,6 +339,7 @@ bool PList::readFromFile(string fp){
         string cbs(code_buffer);
         string nbs(name_buffer);
         Patient temp_pt(cbs,nbs,age_buffer,gender_buffer,race_buffer,orientation_buffer);
+        cout<<"Adding patient to PList object"<<endl;
         this->AddPatient(&temp_pt);
 
         free(code_buffer);

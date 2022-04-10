@@ -428,6 +428,7 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 		unableToAccessFile.Show();
 	}else{
 		*patients=*temp;
+		cout<<patients->Patients().size()<<endl;
 		suffix=patients->AccessSuffixGenerator();
 	}
 
