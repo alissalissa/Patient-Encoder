@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Patient Encoder" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Patient Encoder" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`/usr/wx3.1.6/wx-dynamic-build/wx-config --cppflags`" />
+					<Add directory="/usr/wx3.0.5/include" />
+				</Compiler>
+				<Linker>
+					<Add option="`/usr/wx3.1.6/wx-dynamic-build/wx-config --libs`" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Patient Encoder" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="addtogroup.cpp" />
+		<Unit filename="addtogroup.h" />
+		<Unit filename="deletegroup.cpp" />
+		<Unit filename="deletegroup.h" />
+		<Unit filename="group.cpp" />
+		<Unit filename="group.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main.h" />
+		<Unit filename="mainwindow.cpp" />
+		<Unit filename="mainwindow.h" />
+		<Unit filename="newgroup.cpp" />
+		<Unit filename="newgroup.h" />
+		<Unit filename="newptdialog.cpp" />
+		<Unit filename="newptdialog.h" />
+		<Unit filename="patient.cpp" />
+		<Unit filename="patient.h" />
+		<Unit filename="plist.cpp" />
+		<Unit filename="plist.h" />
+		<Unit filename="suffix.cpp" />
+		<Unit filename="suffix.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
