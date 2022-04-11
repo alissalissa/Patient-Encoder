@@ -159,7 +159,7 @@ bool PList::printToFile(string fp){
 		lb=patients[patient_index]->Name().length();
 		output_file.write(reinterpret_cast<char*>(&lb),sizeof(size_t));
 		//And then the name
-		output_file.write(patients[patient_index]->Name().c_str(),patients[patient_index]->Code().length());
+		output_file.write(patients[patient_index]->Name().c_str(),patients[patient_index]->Name().length());
 		//Same process with age
 		output_file.put(AGE);
 		int ab=patients[patient_index]->Age();
