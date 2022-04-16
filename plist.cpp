@@ -5,15 +5,19 @@
 using namespace std;
 
 //Constructors
+PList::PList(void){
+    gen=new SuffixGenerator();
+}
+
 PList::PList(SuffixGenerator *g){
 	gen=g;
 }
 
 PList::PList(const PList& haystack){
+    //if(gen->is_initialized()) delete gen;
 	patients=haystack.Patients();
 	groups=haystack.Groups();
-	delete gen;
-	gen=haystack.AccessSuffixGenerator();
+	gen=new SuffixGenerator(patients);
 }
 
 //Add/remove
@@ -339,10 +343,13 @@ bool PList::readFromFile(string fp){
         string cbs(code_buffer);
         string nbs(name_buffer);
         cout<<"Adding patient to PList object"<<endl;
-        this->AddPatient(new Patient(cbs,nbs,age_buffer,gender_buffer,race_buffer,orientation_buffer));
+        this->AddPatient(new Patient(nbs,cbs,age_buffer,gender_buffer,race_buffer,orientation_buffer));
+        cout<<"Patient added..."<<endl;
 
         free(code_buffer);
         free(name_buffer);
+
+        file.get(buffer);
 
 	}
 

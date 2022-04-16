@@ -427,7 +427,7 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 		wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for reading!"),wxT("Failure!"));
 		unableToAccessFile.ShowModal();
 	}else{
-		*patients=*temp;
+		patients=new PList(*temp);
 		cout<<patients->Patients().size()<<endl;
 		suffix=patients->AccessSuffixGenerator();
 	}

@@ -89,6 +89,11 @@ void SuffixGenerator::regenerate(vector<Patient*> pl){
 
 /******************END TRACKING***********************/
 
+bool SuffixGenerator::is_initialized(void){
+    if(&codes == NULL) return false;
+    return true;
+}
+
 //A debug method
 /*void SuffixGenerator::test(void){
 	cout<<((codes["18"]["18"]=="")?"Empty":"Something else")<<endl;

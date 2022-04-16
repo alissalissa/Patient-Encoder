@@ -28,6 +28,8 @@ public:
 	//Constructors
 	SuffixGenerator(void)=default;
 	SuffixGenerator(vector<Patient*>);
+	//Destructor
+	~SuffixGenerator(void)=default;
 
 	//updates teh dictionary based on a single patient entry
 	void update(Patient*);
@@ -35,6 +37,9 @@ public:
 	string nextCode(string,string);
 	//Recreates the entire dictionary based on a passed vector of patient objects
 	void regenerate(vector<Patient*>);
+
+    //Returns true if the generator is initialized
+    bool is_initialized(void);
 
 	//A debug method
 	//void test(void);

@@ -44,7 +44,7 @@ private:
 public:
 
 	//Constructors
-	PList(void)=default;
+	PList(void);
 	PList(SuffixGenerator*);
 	~PList(void)=default;
 	PList(const PList&);
