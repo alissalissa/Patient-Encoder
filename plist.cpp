@@ -4,6 +4,15 @@
 
 using namespace std;
 
+//Utility
+bool PList::contains(string code){
+	bool c=false;
+	for_each(patients.begin(),patients.end(),[&](Patient *p){
+		if(p->Code()==code) c=true;
+	});
+	return c;
+}
+
 //Constructors
 PList::PList(void){
     gen=new SuffixGenerator();
@@ -192,9 +201,10 @@ bool PList::printToFile(string fp){
 			//Identify that we're starting a group
 			output_file.put(GROUP_CODE);
 			//Size of the group code
-			output_file<<groups[group_index].Code().length();
+			size_t lb=groups[group_index].Code().length();
+			output_file.write(reinterpret_cast<char*>(&lb),sizeof(size_t));
 			//The actual code
-			output_file.write(groups[group_index].Code().c_str(),groups[group_index].Code().length());
+			output_file.write(groups[group_index].Code().c_str(),lb);
 
 			//Encode the patients
 			if(groups[group_index].Patients().size()>0){
@@ -205,9 +215,10 @@ bool PList::printToFile(string fp){
 					//Indicate that a patient code is coming
 					output_file.put(GROUP_PATIENT_CODE);
 					//Size of the code
-					output_file<<groups[group_index].Patients()[patient_index]->Code().length();
+					lb=groups[group_index].Patients()[patient_index]->Code().length();
+					output_file.write(reinterpret_cast<char*>(&lb),sizeof(size_t));
 					//The code
-					output_file.write(groups[group_index].Patients()[patient_index]->Code().c_str(),groups[group_index].Patients()[patient_index]->Code().length());
+					output_file.write(groups[group_index].Patients()[patient_index]->Code().c_str(),lb);
 					//End the patient
 					output_file.put(END_PATIENT);
 
@@ -342,9 +353,9 @@ bool PList::readFromFile(string fp){
 
         string cbs(code_buffer);
         string nbs(name_buffer);
-        cout<<"Adding patient to PList object"<<endl;
+        //cout<<"Adding patient to PList object"<<endl;
         this->AddPatient(new Patient(nbs,cbs,age_buffer,gender_buffer,race_buffer,orientation_buffer));
-        cout<<"Patient added..."<<endl;
+        //cout<<"Patient added..."<<endl;
 
         free(code_buffer);
         free(name_buffer);
@@ -353,8 +364,80 @@ bool PList::readFromFile(string fp){
 
 	}
 
-	file.close();
+    //if there are groups, start reading them
+	while(buffer==START_GROUPS){
+        file.get(buffer);
+        //Look for the group code tag
+        if(buffer!=GROUP_CODE){
+            file.close();
+            return false;
+        }
+        //Get the length of the group code
+        size_t lb=0;
+        file.read(reinterpret_cast<char*>(&lb),sizeof(size_t));
+        //Allocate memory for the group code
+        char *gcbuf=(char*)malloc(lb);
+        //Read in the group code
+        file.read(gcbuf,lb);
+        //Next up we should see a patient code tag or the end of the group
+        file.get(buffer);
+        //Set aside some memory to store patient codes
+        vector <string> gpcodes;
+        while(buffer==GROUP_PATIENT_CODE){
+			//Read in the length
+			lb=0;
+			file.read(reinterpret_cast<char*>(&lb),sizeof(size_t));
+			//Set aside some memory and read in the code
+			char *gpcbuf=(char*)malloc(lb);
+			file.read(gpcbuf,lb);
+			//Add it to the vector of codes
+			string temp(gpcbuf);
+			gpcodes.push_back(temp);
+			free(gpcbuf);
+			//read in the next code
+			file.get(buffer);
+			if(buffer!=END_PATIENT){
+				free(gcbuf);
+				file.close();
+				return false;
+			}
+			file.get(buffer);
+        }
 
+        //Create a group and add the patients
+        string group_code(gcbuf);
+        free(gcbuf);
+
+        //Check to make sure all the codes are actually in the patient list
+		bool c=true;
+		for_each(gpcodes.begin(),gpcodes.end(),[&](string cotemp){
+			if(!contains(cotemp)) c=false;
+		});
+		if(!c){
+			file.close();
+			return false;
+		}
+		//All the codes are valid
+		this->CreateNewGroup(group_code);
+		for_each(gpcodes.begin(),gpcodes.end(),[&](string cotemp){
+			AddPatientToGroup(cotemp,group_code);
+		});
+
+		if(buffer!=END_GROUP){
+			file.close();
+			return false;
+		}
+
+		file.get(buffer);
+
+	}
+
+	if(buffer!=MAGIC_NUMBER){
+		file.close();
+		return false;
+	}
+
+	file.close();
 	return true;
 
 }

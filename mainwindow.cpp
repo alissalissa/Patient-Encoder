@@ -424,7 +424,7 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 	}
 
 	if(!success){
-		wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for reading!"),wxT("Failure!"));
+		wxMessageDialog unableToAccessFile(this,wxT("Unable to read file.  May be corrupted.  Veryfiy permissions."),wxT("Failure!"));
 		unableToAccessFile.ShowModal();
 	}else{
 		patients=new PList(*temp);

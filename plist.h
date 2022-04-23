@@ -4,6 +4,7 @@
 #define __PATIENTENCODER__PLIST_H__
 
 //STL includes
+#include <algorithm>
 #include <cstdlib> //for free() and malloc()
 #include <fstream>
 #include <string>
@@ -40,6 +41,9 @@ private:
 	vector <PatientGroup> groups;
 	//The code generator object
 	SuffixGenerator *gen;
+
+	//Utility function to search for a code
+	bool contains(string);
 
 public:
 
