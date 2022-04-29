@@ -61,6 +61,7 @@ private:
 	void OnDeleteGroup(wxCommandEvent&);
 	void OnAddToGroup(wxCommandEvent&);
 	void OnRemoveFromGroup(wxCommandEvent&);
+	// TODO (alissa#2#04/26/22): Add functionality for deleting a patient
 	//The patient list control is deselected
 	void OnListDeselect(wxListEvent&);
 

@@ -321,24 +321,31 @@ void MainWindow::OnNewGroup(wxCommandEvent& event){
 }
 
 void MainWindow::OnDeleteGroup(wxCommandEvent &event){
-	DeleteGroupDialog *diag=new DeleteGroupDialog(this,patients->Groups());
-	cout<<"Passed "<<patients->Groups().size()<<" group codes to diag"<<endl;
-	int outcome=diag->ShowModal();
-	if(outcome==wxID_OK){
-		//Establish the code of the group to delete
-		string del_code=diag->get_selected();
-		//Delete the group from the patient list
-		patients->DeleteGroup(del_code);
-		//Remove the group from the selector
-		for(int i=0;i<(int)group_selector_box->GetCount();i++){
-			if(group_selector_box->GetString(i).ToStdString()==del_code){
-				//This is the one to delete
-				group_selector_box->Delete(i);
+
+	//Are there groups to delete?
+	if(patients->Groups().size()<1){
+		wxMessageBox(wxT("No groups to delete!"),wxT("Unable!"));
+	}else{
+		DeleteGroupDialog *diag=new DeleteGroupDialog(this,patients->Groups());
+		//cout<<"Passed "<<patients->Groups().size()<<" group codes to diag"<<endl;
+		int outcome=diag->ShowModal();
+		if(outcome==wxID_OK){
+			//Establish the code of the group to delete
+			string del_code=diag->get_selected();
+			//Delete the group from the patient list
+			patients->DeleteGroup(del_code);
+			//Remove the group from the selector
+			for(int i=0;i<(int)group_selector_box->GetCount();i++){
+				if(group_selector_box->GetString(i).ToStdString()==del_code){
+					//This is the one to delete
+					group_selector_box->Delete(i);
+				}
 			}
 		}
-	}
 
-	delete diag;
+		delete diag;
+
+	}
 }
 
 void MainWindow::OnAddToGroup(wxCommandEvent &event){

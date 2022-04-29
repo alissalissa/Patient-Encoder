@@ -3,7 +3,7 @@
 using namespace std;
 
 //Constructors / Destructors
-DeleteGroupDialog::DeleteGroupDialog( wxWindow* parent, vector<PatientGroup> g,wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, size, style ){
+DeleteGroupDialog::DeleteGroupDialog( wxWindow* parent, vector<PatientGroup> g,wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxDialog( parent, id, title, pos, wxDefaultSize, style ){
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 
 	wxBoxSizer* bSizer15;

@@ -74,6 +74,7 @@ public:
 	PList *operator=(PList);
 
 	//Serialization
+	// TODO (alissa#3#04/26/22): Implement encryption
 	bool printToFile(string);
 	bool readFromFile(string);
 

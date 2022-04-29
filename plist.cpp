@@ -245,7 +245,7 @@ bool PList::printToFile(string fp){
 
 bool PList::readFromFile(string fp){
 
-    cout<<"Entering readFromFile()"<<endl;
+    //cout<<"Entering readFromFile()"<<endl;
 
     //Ensure that we're reading to an empty object
     patients.clear();
