@@ -7,11 +7,13 @@
 
 //System/STL
 #include <algorithm>
+#include <iostream> //for debug code
 #include <string>
 
 //local includes
 #include "addtogroup.h"
 #include "deletegroup.h"
+#include "deletept.h"
 #include "newgroup.h"
 #include "newptdialog.h"
 #include "plist.h"
@@ -61,7 +63,7 @@ private:
 	void OnDeleteGroup(wxCommandEvent&);
 	void OnAddToGroup(wxCommandEvent&);
 	void OnRemoveFromGroup(wxCommandEvent&);
-	// TODO (alissa#2#04/26/22): Add functionality for deleting a patient
+	void OnDeletePatient(wxCommandEvent&);
 	//The patient list control is deselected
 	void OnListDeselect(wxListEvent&);
 

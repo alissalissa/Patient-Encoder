@@ -18,12 +18,12 @@ DeleteGroupDialog::DeleteGroupDialog( wxWindow* parent, vector<PatientGroup> g,w
 
 	//Create the string array so that we can create the group selector
 	groups=g;
-	cout<<"Received "<<g.size()<<" group codes from MainWindow and stored "<<groups.size()<<" codes in groups"<<endl;
-	cout<<"groups[0]="<<groups[0].Code()<<endl;
+	//cout<<"Received "<<g.size()<<" group codes from MainWindow and stored "<<groups.size()<<" codes in groups"<<endl;
+	//cout<<"groups[0]="<<groups[0].Code()<<endl;
 	wxArrayString group_selectorChoices;
 	for(vector<PatientGroup>::iterator it=groups.begin();it!=groups.end();++it){
 		wxString temp((*it).Code());
-		cout<<(*it).Code()<<endl;
+		//cout<<(*it).Code()<<endl;
 		group_selectorChoices.Add(temp);
 	}
 

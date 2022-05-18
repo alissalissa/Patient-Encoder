@@ -116,12 +116,13 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	patient_view->Connect(wxEVT_LIST_ITEM_DESELECTED,wxListEventHandler(MainWindow::OnListDeselect),NULL,this);
 	add_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
+	delete_pt_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
+
 }
 
 MainWindow::~MainWindow(){
 
 	delete patients;
-
 	// Disconnect Events
 	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainWindow::OnCloseWindow ) );
 	this->Disconnect(wxID_ANY,wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MainWindow::OnMenuNew));
@@ -132,9 +133,12 @@ MainWindow::~MainWindow(){
 	new_pt_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnNewPatient ), NULL, this );
 	new_group_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnNewGroup),NULL,this);
 	delete_group_btn->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnDeleteGroup ), NULL, this );
-	patient_view->Disconnect( wxEVT_COMMAND_LIST_END_LABEL_EDIT, wxListEventHandler( MainWindow::OnSelection ), NULL, this );
+	patient_view->Disconnect( wxEVT_LIST_ITEM_SELECTED, wxListEventHandler( MainWindow::OnSelection ), NULL, this );
+	patient_view->Disconnect(wxEVT_LIST_ITEM_DESELECTED,wxListEventHandler(MainWindow::OnListDeselect),NULL,this);
 	add_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
+	delete_pt_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
+
 }
 
 /******************END CONSTRUCTORS/DESTRUCTORS*****************/
@@ -442,4 +446,27 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 	this->updateView();
 	selected=-1;
 
+}
+
+void MainWindow::OnDeletePatient(wxCommandEvent &evt){
+	//First we need to decide if there are any patients to delete
+	if(patients->Size()<1){
+		//Display an alert
+		wxMessageDialog no_patients(this,wxT("No patients to delete!"),wxT("Error!"));
+		no_patients.ShowModal();
+	}else{ //We need to display the selection dialog
+		//Collect all the codes
+		vector <string> codes;
+		for(int i=0;i<patients->Patients().size();i++){
+			codes.push_back(patients->Patients()[i]->Code());
+		}
+		DeletePatientDialog *diag=new DeletePatientDialog(this,codes);
+		int code=diag->ShowModal();
+		if(code==wxOK){
+			//The user pressed OK, so now we process the selection
+			patients->DeletePatient(diag->getSelected());
+			this->updateView();
+		}
+		delete diag;
+	}
 }

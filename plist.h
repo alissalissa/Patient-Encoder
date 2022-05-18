@@ -71,6 +71,8 @@ public:
 	vector<Patient*> Patients(void) const;
 	vector<PatientGroup> Groups(void) const;
 	SuffixGenerator *AccessSuffixGenerator(void)const{return gen;}
+	//How many patients are in this list?
+	size_t Size(void){return patients.size();}
 	PList *operator=(PList);
 
 	//Serialization

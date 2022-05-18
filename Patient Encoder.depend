@@ -2938,7 +2938,7 @@
 	<string>
 	<wx/wx.h>
 
-1648663712 source:/home/alissa/Documents/development/Patient Encoder/deletegroup.cpp
+1651677779 source:/home/alissa/Documents/development/Patient Encoder/deletegroup.cpp
 	"deletegroup.h"
 
 1648663684 /home/alissa/Documents/development/Patient Encoder/deletegroup.h
@@ -2950,17 +2950,19 @@
 1648663819 source:/home/alissa/Documents/development/Patient Encoder/group.cpp
 	"group.h"
 
-1648473083 source:/home/alissa/Documents/development/Patient Encoder/main.cpp
+1652632973 source:/home/alissa/Documents/development/Patient Encoder/main.cpp
 	"mainwindow.h"
 	"main.h"
 
-1650998797 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
+1652893015 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
 	<wx/wx.h>
 	<wx/listctrl.h>
 	<algorithm>
+	<iostream>
 	<string>
 	"addtogroup.h"
 	"deletegroup.h"
+	"deletept.h"
 	"newgroup.h"
 	"newptdialog.h"
 	"plist.h"
@@ -2985,7 +2987,7 @@
 	<vector>
 	"patient.h"
 
-1650991995 /home/alissa/Documents/development/Patient Encoder/plist.h
+1652652269 /home/alissa/Documents/development/Patient Encoder/plist.h
 	<algorithm>
 	<cstdlib>
 	<fstream>
@@ -2999,7 +3001,7 @@
 	<wx/wx.h>
 	"mainwindow.h"
 
-1650984964 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
+1652894871 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
 	"mainwindow.h"
 
 1648663925 source:/home/alissa/Documents/development/Patient Encoder/newgroup.cpp
@@ -5644,4 +5646,13 @@
 1649079693 /usr/wx3.1.6/include/wx/osx/mdi.h
 
 1649079693 /usr/wx3.1.6/include/wx/qt/mdi.h
+
+1652812862 source:/home/alissa/Documents/development/Patient Encoder/deletept.cpp
+	"deletept.h"
+
+1652812901 /home/alissa/Documents/development/Patient Encoder/deletept.h
+	<algorithm>
+	<string>
+	<vector>
+	<wx/wx.h>
 
