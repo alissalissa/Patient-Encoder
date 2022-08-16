@@ -457,7 +457,7 @@ void MainWindow::OnDeletePatient(wxCommandEvent &evt){
 	}else{ //We need to display the selection dialog
 		//Collect all the codes
 		vector <string> codes;
-		for(int i=0;i<patients->Patients().size();i++){
+		for(size_t i=0;i<patients->Patients().size();i++){
 			codes.push_back(patients->Patients()[i]->Code());
 		}
 		DeletePatientDialog *diag=new DeletePatientDialog(this,codes);

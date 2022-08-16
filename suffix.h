@@ -39,7 +39,7 @@ public:
 	void regenerate(vector<Patient*>);
 
     //Returns true if the generator is initialized
-    bool is_initialized(void);
+	//bool is_initialized(void);
 
 	//A debug method
 	//void test(void);
