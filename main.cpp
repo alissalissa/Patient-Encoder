@@ -1,5 +1,7 @@
 //Reads and encodes patient data
 
+// TODO (alissa#1#): Implement open last file
+
 #include "mainwindow.h"
 #include "main.h"
 

@@ -162,10 +162,10 @@ bool PList::printToFile(string fp){
 		//Start the code
 		output_file.put(CODE);
 		//Length of the patient identifier code
-		size_t lb=patients[patient_index]->Code().length();
+		size_t lb=patients[patient_index]->Code().length(); //lb = length buffer
 		output_file.write(reinterpret_cast<char*>(&lb),sizeof(size_t));
 		//Follow with the identifier code
-		output_file.write(patients[patient_index]->Code().c_str(),patients[patient_index]->Code().length());
+		output_file.write(patients[patient_index]->Code().c_str(),lb);
 		//Start the name
 		output_file.put(NAME);
 		//Follow with the length of the name
@@ -175,7 +175,7 @@ bool PList::printToFile(string fp){
 		output_file.write(patients[patient_index]->Name().c_str(),patients[patient_index]->Name().length());
 		//Same process with age
 		output_file.put(AGE);
-		int ab=patients[patient_index]->Age();
+		int ab=patients[patient_index]->Age(); //ab = age buffer
 		output_file.write(reinterpret_cast<char*>(&ab),sizeof(int));
 		//Same process with gender
 		output_file.put(GENDER);
@@ -281,8 +281,9 @@ bool PList::readFromFile(string fp){
 		file.read(reinterpret_cast<char*>(&length),sizeof(size_t));
 		//cout<<"Length of code: "<<length<<endl;
         //Get the actual code
-        char *code_buffer=(char*)malloc(length);
+        char *code_buffer=(char*)malloc(length+1);
         file.read(code_buffer,length);
+        code_buffer[length]='\0';
 
         //Next up should be name
         file.get(buffer);
@@ -294,8 +295,9 @@ bool PList::readFromFile(string fp){
         //Get the length of the name
         file.read(reinterpret_cast<char*>(&length),sizeof(size_t));
         //Get the name
-        char *name_buffer=(char*)malloc(length);
+        char *name_buffer=(char*)malloc(length+1);
         file.read(name_buffer,length);
+        name_buffer[length]='\0';
 
         //Next up should be age
         file.get(buffer);
