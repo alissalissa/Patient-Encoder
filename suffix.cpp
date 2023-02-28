@@ -10,9 +10,9 @@ using namespace std;
 SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
 
 	//Cycle through each patient
-	for(vector<Patient*>::iterator it=pl.begin();it!=pl.end();++it){
+	for_each(pl.begin(),pl.end(),[&](Patient* p){
 
-		string code=(*it)->Code();
+		string code=p->Code();
 		string year=code.substr(0,2);
 		string age=code.substr(2,2);
 		string current=codes[year][age];
@@ -21,8 +21,9 @@ SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
 		}else{
 			codes[year][age]=iterate(current);
 		}
+	});
 
-	}
+
 	//Done!
 }
 

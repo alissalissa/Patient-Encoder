@@ -4,6 +4,7 @@
 #define __PATIENT_ENCODER_SUFFIX_GEN_H__
 
 //System/STL includes
+#include <algorithm>
 #include <cstdlib>
 #include <map>
 #include <string>

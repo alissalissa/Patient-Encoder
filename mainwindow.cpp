@@ -26,6 +26,10 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	quit_menu = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Quit") ) , wxEmptyString, wxITEM_NORMAL );
 	file_menu->Append( quit_menu );
 
+	/*wxMenuItem* test_menu;
+	test_menu = new wxMenuItem( file_menu, wxID_ANY, wxString( wxT("Test") ) , wxEmptyString, wxITEM_NORMAL );
+	file_menu->Append( test_menu );*/
+
 	main_menu_bar->Append( file_menu, wxT("File") );
 
 	this->SetMenuBar( main_menu_bar );
@@ -71,6 +75,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	remove_pt_grp_btn->Enable(false);
 	add_remove_btn_sizer->Add( remove_pt_grp_btn, 0, wxALL, 5 );
 
+	search_box = new wxTextCtrl( this, wxID_ANY, wxT("Search..."), wxDefaultPosition, wxSize( 200,-1 ), 0 );
+	add_remove_btn_sizer->Add( search_box, 0, wxALL, 5 );
 
 	main_sizer->Add( add_remove_btn_sizer, 1, wxEXPAND, 5 );
 
@@ -97,17 +103,20 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	suffix=new SuffixGenerator();
 	//suffix->test();
 
-	//Patient list
 	patients=new PList(suffix);
-
 	selected=-1;
-
+	fetchlp();
+	if(last_path!=""){
+		patients->readFromFile(last_path); // @todo (alissa#5#): Implement error handling
+		this->updateView();
+	}
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainWindow::OnCloseWindow ) );
 	this->Connect(menu_new->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainWindow::OnMenuNew), NULL, this);
 	this->Connect( menu_save->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::SavePatientFile ) );
 	this->Connect(menu_load->GetId(),wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MainWindow::LoadPatientFile));
 	this->Connect( quit_menu->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( MainWindow::OnCloseWindowMenu ) );
+	//this->Connect(test_menu->GetId(),wxEVT_COMMAND_MENU_SELECTED,wxCommandEventHandler(MainWindow::OnTest));
 	group_selector_box->Connect(wxEVT_COMBOBOX, wxCommandEventHandler( MainWindow::OnGroupSelection ), NULL, this );
 	new_pt_btn->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MainWindow::OnNewPatient ), NULL, this );
 	new_group_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnNewGroup),NULL,this);
@@ -117,6 +126,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	add_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
 	delete_pt_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
+	//search_box->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MainWindow::OnTextChange ), NULL, this );
 
 }
 
@@ -138,6 +148,7 @@ MainWindow::~MainWindow(){
 	add_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
 	delete_pt_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
+	//search_box->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MainWindow::OnTextChange ), NULL, this );
 
 }
 
@@ -179,6 +190,9 @@ void MainWindow::updateView(void){
     patient_view->AppendColumn(wxT("Gender"));
     patient_view->AppendColumn(wxT("Race"));
     patient_view->AppendColumn(wxT("Orientation"));
+
+    //Get the search term if there is one
+    string st=search_box->GetValue().ToStdString();
 
     //Set aside some memory for all the patients we need to update the view with
     vector<Patient*> ptu;
@@ -255,6 +269,66 @@ void MainWindow::updateView(void){
 
 }
 
+// @todo (alissa#2#): Clarify how to handle writing the path when the conf file already exists
+//path config save and load
+bool MainWindow::savelp(string new_path){
+	//"~/.local/share/PatientEncoder/" guaranteed to exist on application load/implement (main.cpp)
+	fstream config("~/.local/share/PatientEncoder/pe.conf",ios_base::out);
+	if(!config.is_open()) return false;
+	config<<"last_path="<<new_path;
+	config.close();
+	return true;
+}
+
+bool MainWindow::fetchlp(void){
+	//"~/.local/share/PatientEncoder/" guaranteed to exist on application load/implement (main.cpp)
+	//We know the path exists, but what about the config file?
+	string un(getenv("USER"));
+	string p="/home/"+un+"/.local/share/PatientEncoder/pe.conf";
+	filesystem::path conf_path(p);
+	if(!filesystem::exists(conf_path)){
+		last_path="";
+		return false;
+	}
+
+	//There is a configuration file to be read
+	fstream conf_file(p,ios_base::in);
+	if(!conf_file.is_open()) return false;
+	string conf_contents="";
+	char b='\0';
+	while(!conf_file.eof()){
+		conf_file.get(b);
+		conf_contents+=b;
+	}
+	conf_file.close();
+
+	//Parse the path variable from the conf file
+	int cnt=char_count(conf_contents,'\n'); //cnt stands for count, not cunt ;)
+	string path_variable="";
+	if(cnt>1){
+		string conf_contents_lines[cnt+1];
+		pa_split(conf_contents,'\n',conf_contents_lines);
+		for(int i=0;i<=cnt;i++){
+			if(conf_contents_lines[i].substr(0,10)=="last_path="){
+				path_variable=conf_contents_lines[i];
+			}
+		}
+		if(path_variable==""){
+			last_path="";
+			return false;
+		}
+	}else if(conf_contents.substr(0,10)=="last_path="){
+		path_variable=conf_contents;
+	}else{
+		last_path="";
+		return false;
+	}
+	last_path=path_variable.substr(10,string::npos);
+
+	return true;
+
+}
+
 /**************************END PATIENT MANAGEMENT************************/
 
 //Event Handlers
@@ -273,6 +347,13 @@ void MainWindow::OnMenuNew(wxCommandEvent & event){
 	suffix=patients->AccessSuffixGenerator();
 	//update the view
 	updateView();
+}
+
+void MainWindow::OnTest(wxCommandEvent &event){
+	PWFetcher *f=new PWFetcher(TYPE_WX);
+	string pw=f->fetch();
+	delete f;
+	cout<<pw<<endl;
 }
 
 void MainWindow::OnSelection(wxListEvent &event){
@@ -411,14 +492,16 @@ void MainWindow::SavePatientFile(wxCommandEvent &event){
 
 		//Some quick test code
 		//cout<<saveSelector.GetPath().ToStdString()<<endl;
+		string p=saveSelector.GetPath().ToStdString();
+		success = patients->printToFile(p);
+		// @todo (alissa#2#): Handle unsuccessful save
+		savelp(p); //save the new path to the last open section of the config file
 
-		success = patients->printToFile(saveSelector.GetPath().ToStdString());
+		if(!success){
+			wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for writing!"),wxT("Failure!"));
+			unableToAccessFile.ShowModal();
+		}
 
-	}
-
-	if(!success){
-		wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for writing!"),wxT("Failure!"));
-		unableToAccessFile.ShowModal();
 	}
 
 }
@@ -432,15 +515,18 @@ void MainWindow::LoadPatientFile(wxCommandEvent &event){
 
 	if(loadSelector.ShowModal()==wxID_OK){
 		success=temp->readFromFile(loadSelector.GetPath().ToStdString());
-	}
+		string p=loadSelector.GetPath().ToStdString();
 
-	if(!success){
-		wxMessageDialog unableToAccessFile(this,wxT("Unable to read file.  May be corrupted.  Veryfiy permissions."),wxT("Failure!"));
-		unableToAccessFile.ShowModal();
-	}else{
-		patients=new PList(*temp);
-		cout<<patients->Patients().size()<<endl;
-		suffix=patients->AccessSuffixGenerator();
+		if(!success){
+			wxMessageDialog unableToAccessFile(this,wxT("Unable to read file.  May be corrupted.  Veryfiy permissions."),wxT("Failure!"));
+			unableToAccessFile.ShowModal();
+		}else{
+			patients=new PList(*temp);
+			cout<<patients->Patients().size()<<endl;
+			suffix=patients->AccessSuffixGenerator();
+			savelp(p);
+		}
+
 	}
 
 	this->updateView();

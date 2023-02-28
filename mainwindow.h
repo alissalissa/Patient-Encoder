@@ -7,6 +7,9 @@
 
 //System/STL
 #include <algorithm>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
 #include <iostream> //for debug code
 #include <string>
 
@@ -16,8 +19,10 @@
 #include "deletept.h"
 #include "newgroup.h"
 #include "newptdialog.h"
+#include "peutility.h"
 #include "plist.h"
 #include "suffix.h"
+#include "ses.h"
 
 using namespace std;
 
@@ -36,6 +41,7 @@ private:
 	wxButton* remove_pt_grp_btn;
 	wxStaticText* view_label;
 	wxListView* patient_view;
+	wxTextCtrl *search_box;
 
 	//The code generator
 	SuffixGenerator *suffix;
@@ -46,15 +52,23 @@ private:
 	//The currently selected patient
 	int selected;
 
+	//The last accessed file path
+	string last_path;
+
 	//List Management
 	void update(Patient*);
 	void updateView(void);
+
+	//Saves a path to the config file ~/.local/share/PatientEncoder/pe.conf
+	bool savelp(string);
+	bool fetchlp(void);
 
 	//Event Handlers
 	void OnCloseWindow( wxCloseEvent&);
 	void SavePatientFile( wxCommandEvent& event );
 	void LoadPatientFile(wxCommandEvent & event);
 	void OnMenuNew(wxCommandEvent & event);
+	void OnTest(wxCommandEvent & event);
 	void OnCloseWindowMenu( wxCommandEvent& event );
 	void OnSelection( wxListEvent& event ); //When a patient is selected
     void OnGroupSelection (wxCommandEvent& event);
@@ -66,6 +80,8 @@ private:
 	void OnDeletePatient(wxCommandEvent&);
 	//The patient list control is deselected
 	void OnListDeselect(wxListEvent&);
+// @todo (alissa#2#): Implement text search
+	//void OnTextChange(wxCommandEvent&);
 
 public:
 

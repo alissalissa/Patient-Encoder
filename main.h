@@ -1,5 +1,10 @@
 //Main App
 
+//STL Includes
+#include <cstdlib>
+#include <filesystem>
+#include <string>
+
 #include <wx/wx.h>
 
 //Local includes
