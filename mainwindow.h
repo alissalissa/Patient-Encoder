@@ -80,8 +80,9 @@ private:
 	void OnDeletePatient(wxCommandEvent&);
 	//The patient list control is deselected
 	void OnListDeselect(wxListEvent&);
-// @todo (alissa#2#): Implement text search
-	//void OnTextChange(wxCommandEvent&);
+	void OnSearchTextChange(wxCommandEvent&);
+
+	vector <Patient*> currently_displayed_patients(void);
 
 public:
 

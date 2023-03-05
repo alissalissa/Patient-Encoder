@@ -4,4 +4,4 @@
 /*.layout
 /*.dat
 /*.cfg
-/*.depend
+ValgrindOut.xml

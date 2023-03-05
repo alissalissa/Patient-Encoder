@@ -5,7 +5,7 @@
 
 //STL includes
 #include <algorithm>
-#include <cstdlib> //for free() and malloc()
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -43,7 +43,7 @@ private:
 	SuffixGenerator *gen;
 
 	//Utility function to search for a code
-	bool contains(string);
+	bool contains_code(string);
 
 public:
 
@@ -81,5 +81,9 @@ public:
 	bool readFromFile(string);
 
 };
+
+//Searches the vector to identify if a search term is met in any fields
+//	returns the index of a matching Patient*, or -1 if the term can't be found
+int match_term(vector <Patient*>,string);
 
 #endif // __PATIENTENCODER__PLIST_H__

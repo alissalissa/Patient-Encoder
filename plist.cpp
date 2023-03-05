@@ -5,7 +5,7 @@
 using namespace std;
 
 //Utility
-bool PList::contains(string code){
+bool PList::contains_code(string code){
 	bool c=false;
 	for_each(patients.begin(),patients.end(),[&](Patient *p){
 		if(p->Code()==code) c=true;
@@ -413,7 +413,7 @@ bool PList::readFromFile(string fp){
         //Check to make sure all the codes are actually in the patient list
 		bool c=true;
 		for_each(gpcodes.begin(),gpcodes.end(),[&](string cotemp){
-			if(!contains(cotemp)) c=false;
+			if(!contains_code(cotemp)) c=false;
 		});
 		if(!c){
 			file.close();
@@ -442,4 +442,25 @@ bool PList::readFromFile(string fp){
 	file.close();
 	return true;
 
+}
+
+int match_term(vector<Patient*> haystack,string term){
+
+	for(int i=0;i<(int)haystack.size();i++){
+		//Cycle through each term and see if the term matches
+		//Start by grabbing the pointer to the patient so we don't have to keep re-accessing
+		Patient p=*(haystack[i]);
+		if(p.Name().find(term)!=string::npos) return i;
+		if(p.Code().find(term)!=string::npos) return i;
+		//now we need to do some type conversions
+		if(term.length()==1){
+			char char_term=term[0];
+			if(p.Race()==char_term) return i;
+			if(p.Gender()==char_term) return i;
+			if(p.Orientation()==char_term) return i;
+		}
+		int int_term=atoi(term.c_str());
+		if(p.Age()==int_term) return i;
+	}
+	return -1;
 }

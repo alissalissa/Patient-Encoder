@@ -110,6 +110,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 		patients->readFromFile(last_path); // @todo (alissa#5#): Implement error handling
 		this->updateView();
 	}
+
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( MainWindow::OnCloseWindow ) );
 	this->Connect(menu_new->GetId(), wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MainWindow::OnMenuNew), NULL, this);
@@ -126,7 +127,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	add_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
 	delete_pt_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
-	//search_box->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MainWindow::OnTextChange ), NULL, this );
+	search_box->Connect( wxEVT_TEXT, wxCommandEventHandler( MainWindow::OnSearchTextChange ), NULL, this );
 
 }
 
@@ -195,45 +196,25 @@ void MainWindow::updateView(void){
     string st=search_box->GetValue().ToStdString();
 
     //Set aside some memory for all the patients we need to update the view with
-    vector<Patient*> ptu;
-    if(group_selector_box->GetSelection()==0){
-        //This is all patients
-        ptu=patients->Patients();
-    }else{
-        //Get the current group code
-        string gc=group_selector_box->GetStringSelection().ToStdString();
-        //Debug code
-        //int s=(int)(patients->Group(gc).Patients().size());
-        //End debug code
-
-		//Do we have patients to load in this group yet?
-		if(patients->Group(gc).Patients().size()>0){
-			//cout<<patients->Group(gc).Patients().size()<<endl;
-			for(int i=0;i<(int)(patients->Group(gc).Patients().size());i++){
-				ptu.push_back(patients->Group(gc).Patients()[i]);
-				//Debug code
-				//cout<<(*it)->Code()<<"\t\t"<<(*it)->Name()<<"\t\t"<<(*it)->Age()<<"\t\t"<<(*it)->Gender()<<endl;
-			}
-		}
-    }
+    vector<Patient*> ptu=currently_displayed_patients();
 
     //Update from the ptu
     if(ptu.size()>0){
 		int item_index=0;
-		for(vector<Patient*>::iterator it=ptu.begin();it!=ptu.end();++it){
+		for_each(ptu.begin(),ptu.end(),[&](Patient *p){
 			//Code - name - gender - race - orientation
-			wxString code((*it)->Code());
+			wxString code(p->Code());
 			patient_view->InsertItem(item_index,code);
-			wxString name((*it)->Name());
+			wxString name(p->Name());
 			patient_view->SetItem(item_index,1,name);
-			wxString gender((*it)->Gender());
+			wxString gender(p->Gender());
 			patient_view->SetItem(item_index,2,gender);
-			wxString race((*it)->Race());
+			wxString race(p->Race());
 			patient_view->SetItem(item_index,3,race);
-			wxString orientation((*it)->Orientation());
+			wxString orientation(p->Orientation());
 			patient_view->SetItem(item_index,4,orientation);
 			item_index++;
-		}
+		});
     }
     //update the view
     this->Update();
@@ -555,4 +536,36 @@ void MainWindow::OnDeletePatient(wxCommandEvent &evt){
 		}
 		delete diag;
 	}
+}
+
+void MainWindow::OnSearchTextChange(wxCommandEvent &evt){
+	string current_term=search_box->GetLineText(0).ToStdString();
+	//test code
+	//cout<<current_term<<endl;
+	// @fixme (alissa#1#): Implement group-specific search
+	if(!current_term.empty()){
+		int index=match_term(this->currently_displayed_patients(),current_term);
+		if(index>=0){
+			patient_view->Focus(index);
+			if(selected>=0)
+				patient_view->Select(selected,false);
+			selected=index;
+			patient_view->Select(index,true);
+		}else{
+			if(selected>=0)
+				patient_view->Select(selected,false);
+			selected=-1;
+		}
+	}else{
+		if(selected>=0)
+			patient_view->Select(selected,false);
+		selected=-1;
+	}
+}
+
+vector <Patient*> MainWindow::currently_displayed_patients(void){
+	//What group is currently selected?
+	if(group_selector_box->GetSelection()==0) return patients->Patients();
+	string selected_group=group_selector_box->GetStringSelection().ToStdString();
+	return patients->Group(selected_group).Patients();
 }
