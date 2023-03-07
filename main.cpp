@@ -1,5 +1,5 @@
 //Reads and encodes patient data
-
+// @todo (alissa#9#): Implement doxygen documentation
 #include "mainwindow.h"
 #include "main.h"
 

@@ -107,7 +107,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	selected=-1;
 	fetchlp();
 	if(last_path!=""){
-		patients->readFromFile(last_path); // @todo (alissa#5#): Implement error handling
+		patients->readFromFile(last_path); // @todo (alissa#3#): Implement error handling
 		this->updateView();
 	}
 
@@ -542,7 +542,6 @@ void MainWindow::OnSearchTextChange(wxCommandEvent &evt){
 	string current_term=search_box->GetLineText(0).ToStdString();
 	//test code
 	//cout<<current_term<<endl;
-	// @fixme (alissa#1#): Implement group-specific search
 	if(!current_term.empty()){
 		int index=match_term(this->currently_displayed_patients(),current_term);
 		if(index>=0){
