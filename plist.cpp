@@ -450,14 +450,14 @@ int match_term(vector<Patient*> haystack,string term){
 		//Cycle through each term and see if the term matches
 		//Start by grabbing the pointer to the patient so we don't have to keep re-accessing
 		Patient p=*(haystack[i]);
-		if(p.Name().find(term)!=string::npos) return i;
-		if(p.Code().find(term)!=string::npos) return i;
+		if(string_to_lower(p.Name()).find(term)!=string::npos) return i;
+		if(string_to_lower(p.Code()).find(term)!=string::npos) return i;
 		//now we need to do some type conversions
 		if(term.length()==1){
 			char char_term=term[0];
-			if(p.Race()==char_term) return i;
-			if(p.Gender()==char_term) return i;
-			if(p.Orientation()==char_term) return i;
+			if(tolower(p.Race())==char_term) return i;
+			if(tolower(p.Gender())==char_term) return i;
+			if(tolower(p.Orientation())==char_term) return i;
 		}
 		int int_term=atoi(term.c_str());
 		if(p.Age()==int_term) return i;

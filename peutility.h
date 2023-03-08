@@ -4,6 +4,8 @@
 #ifndef __PEUTILITY_H__
 #define __PEUTILITY_H__
 
+#include <algorithm>
+#include <ctype.h>
 #include <string>
 
 using namespace std;
@@ -15,4 +17,7 @@ int char_count(string,char);
 //	atypical algorithm based around pre-allocating memory via char_count()
 void pa_split(string,char,string*);
 
+
+//Simplify making a string lower case
+string string_to_lower(string);
 #endif

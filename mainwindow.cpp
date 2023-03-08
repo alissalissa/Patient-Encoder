@@ -539,7 +539,8 @@ void MainWindow::OnDeletePatient(wxCommandEvent &evt){
 }
 
 void MainWindow::OnSearchTextChange(wxCommandEvent &evt){
-	string current_term=search_box->GetLineText(0).ToStdString();
+	string current_term=string_to_lower(search_box->GetLineText(0).ToStdString());
+
 	//test code
 	//cout<<current_term<<endl;
 	if(!current_term.empty()){

@@ -6,6 +6,7 @@
 //STL includes
 #include <algorithm>
 #include <cstdlib>
+#include <ctype.h>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -13,6 +14,7 @@
 //Local includes
 #include "group.h"
 #include "patient.h"
+#include "peutility.h"
 #include "suffix.h"
 
 //macros

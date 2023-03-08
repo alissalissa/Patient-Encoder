@@ -8,6 +8,7 @@
 //System/STL
 #include <algorithm>
 #include <cstdlib>
+#include <ctype.h>
 #include <filesystem>
 #include <fstream>
 #include <iostream> //for debug code

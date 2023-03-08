@@ -26,3 +26,11 @@ void pa_split(string haystack,char target,string *ret){
 	ret[occurences]=haystack;
 
 }
+
+string string_to_lower(string h){
+	string haystack=h;
+	for_each(haystack.begin(),haystack.end(),[&](char &c){
+		c=tolower(c);
+	});
+	return haystack;
+}

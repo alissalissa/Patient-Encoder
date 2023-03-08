@@ -2662,15 +2662,16 @@
 1648663819 source:/home/alissa/Documents/development/Patient Encoder/group.cpp
 	"group.h"
 
-1677606206 source:/home/alissa/Documents/development/Patient Encoder/main.cpp
+1678151981 source:/home/alissa/Documents/development/Patient Encoder/main.cpp
 	"mainwindow.h"
 	"main.h"
 
-1678040358 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
+1678287531 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
 	<wx/wx.h>
 	<wx/listctrl.h>
 	<algorithm>
 	<cstdlib>
+	<ctype.h>
 	<filesystem>
 	<fstream>
 	<iostream>
@@ -2705,14 +2706,16 @@
 	<vector>
 	"patient.h"
 
-1678049557 /home/alissa/Documents/development/Patient Encoder/plist.h
+1678288659 /home/alissa/Documents/development/Patient Encoder/plist.h
 	<algorithm>
 	<cstdlib>
+	<ctype.h>
 	<fstream>
 	<string>
 	<vector>
 	"group.h"
 	"patient.h"
+	"peutility.h"
 	"suffix.h"
 
 1674353337 /home/alissa/Documents/development/Patient Encoder/main.h
@@ -2722,7 +2725,7 @@
 	<wx/wx.h>
 	"mainwindow.h"
 
-1678049667 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
+1678288423 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
 	"mainwindow.h"
 
 1648663925 source:/home/alissa/Documents/development/Patient Encoder/newgroup.cpp
@@ -2737,7 +2740,7 @@
 1678049591 source:/home/alissa/Documents/development/Patient Encoder/plist.cpp
 	"plist.h"
 
-1677265955 source:/home/alissa/Documents/development/Patient Encoder/suffix.cpp
+1678227749 source:/home/alissa/Documents/development/Patient Encoder/suffix.cpp
 	"suffix.h"
 
 1657117190 /usr/wx3.2.0/include/wx/wx.h
@@ -10603,10 +10606,12 @@
 
 1675898041 /usr/wx3.2.2/include/wx/qt/mdi.h
 
-1677266019 /home/alissa/Documents/development/Patient Encoder/peutility.h
+1678288365 /home/alissa/Documents/development/Patient Encoder/peutility.h
+	<algorithm>
+	<ctype.h>
 	<string>
 
-1677266080 source:/home/alissa/Documents/development/Patient Encoder/peutility.cpp
+1678288389 source:/home/alissa/Documents/development/Patient Encoder/peutility.cpp
 	"peutility.h"
 
 1676299539 /usr/wx3.2.2.1/include/wx/wx.h

@@ -8,10 +8,8 @@ using namespace std;
 //Constructors
 //Goes through a list of patients to generate the code tree
 SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
-
 	//Cycle through each patient
 	for_each(pl.begin(),pl.end(),[&](Patient* p){
-
 		string code=p->Code();
 		string year=code.substr(0,2);
 		string age=code.substr(2,2);
@@ -22,9 +20,6 @@ SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
 			codes[year][age]=iterate(current);
 		}
 	});
-
-
-	//Done!
 }
 
 /*********************END CONSTRUCTORS**********************/
