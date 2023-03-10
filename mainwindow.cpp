@@ -465,8 +465,9 @@ void MainWindow::OnListDeselect(wxListEvent &event){
 
 void MainWindow::SavePatientFile(wxCommandEvent &event){
 
+	wxString wx_last_path(last_path.substr(0,last_path.rfind("/")));
 	//We need to get the file we're saving to
-	wxFileDialog saveSelector(this,wxT("Save the current patient load"),wxT(""),wxT(""),wxT("*.dat"),wxFD_SAVE);
+	wxFileDialog saveSelector(this,wxT("Save the current patient load"),wx_last_path,wxT(""),wxT("*.dat"),wxFD_SAVE);
 	bool success=false;
 
 	if(saveSelector.ShowModal()==wxID_OK){
@@ -490,7 +491,8 @@ void MainWindow::SavePatientFile(wxCommandEvent &event){
 void MainWindow::LoadPatientFile(wxCommandEvent &event){
 
 	//Get the path
-	wxFileDialog loadSelector(this,wxT("Load a set oatient data"),wxT(""),wxT(""),wxT("*.dat"),wxFD_OPEN);
+	wxString wx_last_path(last_path.substr(0,last_path.rfind("/")));
+	wxFileDialog loadSelector(this,wxT("Load a set of patient data"),wx_last_path,wxT(""),wxT("*.dat"),wxFD_OPEN);
 	bool success=false;
 	PList *temp=new PList();
 
