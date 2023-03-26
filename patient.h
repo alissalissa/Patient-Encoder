@@ -28,8 +28,8 @@
 #define peORIENTATION_STRAIGHT 'S'
 #define peORIENTATION_GAY 'G'
 #define peORIENTATION_BI 'B'
-#define peORIENTATION_UNKNOWN 'U'
 #define peORIENTATION_OTHER 'O'
+#define peORIENTATION_UNKNOWN 'U'
 #define peORIENTATION_DEFAULT peORIENTATION_UNKNOWN
 //Define others once we verify the time2track categories
 

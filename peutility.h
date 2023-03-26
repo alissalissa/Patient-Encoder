@@ -6,7 +6,10 @@
 
 #include <algorithm>
 #include <ctype.h>
+#include <sstream>
 #include <string>
+
+#include <wx/wx.h>
 
 using namespace std;
 
@@ -17,7 +20,11 @@ int char_count(string,char);
 //	atypical algorithm based around pre-allocating memory via char_count()
 void pa_split(string,char,string*);
 
-
 //Simplify making a string lower case
 string string_to_lower(string);
+
+//Simplify making a wxString from a std::string or int
+wxString make_wx_string(string);
+wxString make_wx_string(int);
+
 #endif

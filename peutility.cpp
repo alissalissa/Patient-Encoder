@@ -34,3 +34,14 @@ string string_to_lower(string h){
 	});
 	return haystack;
 }
+
+wxString make_wx_string(string haystack){
+	wxString ret(haystack.c_str());
+	return ret;
+}
+
+wxString make_wx_string(int haystack){
+	ostringstream sbuf;
+	sbuf<<haystack;
+	return make_wx_string(sbuf.str());
+}

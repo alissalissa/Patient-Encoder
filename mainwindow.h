@@ -20,6 +20,7 @@
 #include "deletept.h"
 #include "newgroup.h"
 #include "newptdialog.h"
+#include "pedit.h"
 #include "peutility.h"
 #include "plist.h"
 #include "suffix.h"
@@ -43,6 +44,7 @@ private:
 	wxStaticText* view_label;
 	wxListView* patient_view;
 	wxTextCtrl *search_box;
+	wxButton *edit_button;
 
 	//The code generator
 	SuffixGenerator *suffix;
@@ -82,6 +84,7 @@ private:
 	//The patient list control is deselected
 	void OnListDeselect(wxListEvent&);
 	void OnSearchTextChange(wxCommandEvent&);
+	void OnEditPatient(wxCommandEvent&);
 
 	vector <Patient*> currently_displayed_patients(void);
 

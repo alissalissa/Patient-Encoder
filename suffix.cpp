@@ -7,6 +7,7 @@ using namespace std;
 
 //Constructors
 //Goes through a list of patients to generate the code tree
+// FIXME (alissa#1#): Figure out single-digit ages
 SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
 	//Cycle through each patient
 	for_each(pl.begin(),pl.end(),[&](Patient* p){

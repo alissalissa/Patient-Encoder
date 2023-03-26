@@ -75,6 +75,10 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	remove_pt_grp_btn->Enable(false);
 	add_remove_btn_sizer->Add( remove_pt_grp_btn, 0, wxALL, 5 );
 
+	edit_button=new wxButton(this,wxID_ANY,wxT("Edit Patient"),wxDefaultPosition,wxDefaultSize,0);
+	edit_button->Enable(false);
+	add_remove_btn_sizer->Add(edit_button,0,wxALL,5);
+
 	search_box = new wxTextCtrl( this, wxID_ANY, wxT("Search..."), wxDefaultPosition, wxSize( 200,-1 ), 0 );
 	add_remove_btn_sizer->Add( search_box, 0, wxALL, 5 );
 
@@ -128,6 +132,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	remove_pt_grp_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
 	delete_pt_btn->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
 	search_box->Connect( wxEVT_TEXT, wxCommandEventHandler( MainWindow::OnSearchTextChange ), NULL, this );
+	edit_button->Connect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnEditPatient),NULL,this);
 
 }
 
@@ -149,7 +154,8 @@ MainWindow::~MainWindow(){
 	add_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnAddToGroup),NULL,this);
 	remove_pt_grp_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnRemoveFromGroup),NULL,this);
 	delete_pt_btn->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnDeletePatient),NULL,this);
-	//search_box->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MainWindow::OnTextChange ), NULL, this );
+	search_box->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MainWindow::OnSearchTextChange ), NULL, this );
+	edit_button->Disconnect(wxEVT_COMMAND_BUTTON_CLICKED,wxCommandEventHandler(MainWindow::OnEditPatient),NULL,this);
 
 }
 
@@ -340,6 +346,7 @@ void MainWindow::OnTest(wxCommandEvent &event){
 void MainWindow::OnSelection(wxListEvent &event){
 	add_pt_grp_btn->Enable(true);
 	remove_pt_grp_btn->Enable(true);
+	edit_button->Enable(true);
 
 	//Set the selected patient number
 	selected=(int)event.GetIndex();
@@ -460,6 +467,7 @@ void MainWindow::OnListDeselect(wxListEvent &event){
 	//Disbale the buttons
 	add_pt_grp_btn->Enable(false);
 	remove_pt_grp_btn->Enable(false);
+	edit_button->Enable(false);
 
 }
 
@@ -563,6 +571,21 @@ void MainWindow::OnSearchTextChange(wxCommandEvent &evt){
 			patient_view->Select(selected,false);
 		selected=-1;
 	}
+}
+
+void MainWindow::OnEditPatient(wxCommandEvent &evt){
+	EditPatientDialog *dialog=new EditPatientDialog(this,patients->Patients()[selected]);
+	int outcome=dialog->ShowModal();
+	if(outcome==wxOK){
+		patients->Patients()[selected]->Name()=dialog->NewName();
+		patients->Patients()[selected]->Code()=dialog->NewCode();
+		patients->Patients()[selected]->Age()=dialog->NewAge();
+		patients->Patients()[selected]->Gender()=dialog->NewGender();
+		patients->Patients()[selected]->Race()=dialog->NewRace();
+		patients->Patients()[selected]->Orientation()=dialog->NewOrientation();
+	}
+	this->updateView();
+	delete dialog;
 }
 
 vector <Patient*> MainWindow::currently_displayed_patients(void){

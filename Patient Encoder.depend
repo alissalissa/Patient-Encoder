@@ -2635,7 +2635,7 @@
 	<vector>
 	"patient.h"
 
-1677986473 /home/alissa/Documents/development/Patient Encoder/patient.h
+1679794682 /home/alissa/Documents/development/Patient Encoder/patient.h
 	<cstdlib>
 	<iostream>
 	<string>
@@ -2666,7 +2666,7 @@
 	"mainwindow.h"
 	"main.h"
 
-1678287531 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
+1679750238 /home/alissa/Documents/development/Patient Encoder/mainwindow.h
 	<wx/wx.h>
 	<wx/listctrl.h>
 	<algorithm>
@@ -2681,6 +2681,7 @@
 	"deletept.h"
 	"newgroup.h"
 	"newptdialog.h"
+	"pedit.h"
 	"peutility.h"
 	"plist.h"
 	"suffix.h"
@@ -2725,7 +2726,7 @@
 	<wx/wx.h>
 	"mainwindow.h"
 
-1678288423 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
+1679799008 source:/home/alissa/Documents/development/Patient Encoder/mainwindow.cpp
 	"mainwindow.h"
 
 1648663925 source:/home/alissa/Documents/development/Patient Encoder/newgroup.cpp
@@ -2740,7 +2741,7 @@
 1678288603 source:/home/alissa/Documents/development/Patient Encoder/plist.cpp
 	"plist.h"
 
-1678227749 source:/home/alissa/Documents/development/Patient Encoder/suffix.cpp
+1679521979 source:/home/alissa/Documents/development/Patient Encoder/suffix.cpp
 	"suffix.h"
 
 1657117190 /usr/wx3.2.0/include/wx/wx.h
@@ -10606,12 +10607,14 @@
 
 1675898041 /usr/wx3.2.2/include/wx/qt/mdi.h
 
-1678288365 /home/alissa/Documents/development/Patient Encoder/peutility.h
+1679795286 /home/alissa/Documents/development/Patient Encoder/peutility.h
 	<algorithm>
 	<ctype.h>
+	<sstream>
 	<string>
+	<wx/wx.h>
 
-1678288389 source:/home/alissa/Documents/development/Patient Encoder/peutility.cpp
+1679795362 source:/home/alissa/Documents/development/Patient Encoder/peutility.cpp
 	"peutility.h"
 
 1676299539 /usr/wx3.2.2.1/include/wx/wx.h
@@ -13234,4 +13237,13 @@
 1676299539 /usr/wx3.2.2.1/include/wx/osx/mdi.h
 
 1676299539 /usr/wx3.2.2.1/include/wx/qt/mdi.h
+
+1679798939 source:/home/alissa/Documents/development/Patient Encoder/pedit.cpp
+	"pedit.h"
+
+1679799068 /home/alissa/Documents/development/Patient Encoder/pedit.h
+	<cstdlib>
+	<wx/wx.h>
+	"patient.h"
+	"peutility.h"
 
