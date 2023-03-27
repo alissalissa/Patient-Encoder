@@ -7,13 +7,12 @@ using namespace std;
 
 //Constructors
 //Goes through a list of patients to generate the code tree
-// FIXME (alissa#1#): Figure out single-digit ages
 SuffixGenerator::SuffixGenerator(vector<Patient*> pl){
 	//Cycle through each patient
 	for_each(pl.begin(),pl.end(),[&](Patient* p){
 		string code=p->Code();
 		string year=code.substr(0,2);
-		string age=code.substr(2,2);
+		string age=code.substr(2,(code.length()>4)?2:1);
 		string current=codes[year][age];
 		if(current==""){
 			codes[year][age]="a";
@@ -65,9 +64,8 @@ string SuffixGenerator::iterate(string code){
 
 //Tracking
 void SuffixGenerator::update(Patient *p){
-	string c=p->Code();
-	string year=c.substr(0,2);
-	string age=c.substr(2,2);
+	string year=p->Code().substr(0,2);
+	string age=p->Code().substr(2,(p->Code().length()>4)?2:1);
 	//Some debug code
 	//cout<<c<<"\t\t"<<year<<"\t\t"<<age<<endl;
 	//cout<<codes.size()<<endl;
