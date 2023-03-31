@@ -256,13 +256,16 @@ void MainWindow::updateView(void){
 
 }
 
-// @todo (alissa#2#): Clarify how to handle writing the path when the conf file already exists
 //path config save and load
 bool MainWindow::savelp(string new_path){
 	//"~/.local/share/PatientEncoder/" guaranteed to exist on application load/implement (main.cpp)
 	fstream config("~/.local/share/PatientEncoder/pe.conf",ios_base::out);
 	if(!config.is_open()) return false;
-	config<<"last_path="<<new_path;
+	try{
+		config<<"last_path="<<new_path;
+	}catch(ios_base::failure &excpt){
+		cout<<"Unable to write to configuration file.  Check permissions maybe?"<<endl<<excpt.what()<<endl;
+	}
 	config.close();
 	return true;
 }
@@ -484,10 +487,8 @@ void MainWindow::SavePatientFile(wxCommandEvent &event){
 		//cout<<saveSelector.GetPath().ToStdString()<<endl;
 		string p=saveSelector.GetPath().ToStdString();
 		success = patients->printToFile(p);
-		// @todo (alissa#2#): Handle unsuccessful save
-		savelp(p); //save the new path to the last open section of the config file
-
-		if(!success){
+		if(success) savelp(p); //save the new path to the last open section of the config file
+		else{
 			wxMessageDialog unableToAccessFile(this,wxT("Unable to open file for writing!"),wxT("Failure!"));
 			unableToAccessFile.ShowModal();
 		}
