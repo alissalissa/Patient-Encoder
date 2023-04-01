@@ -147,13 +147,13 @@ void PList::Digest(PList *source){
 	groups.clear();
 
 	gen=new SuffixGenerator();
-	for_each(source->Patients().begin(),source->Patients().end(),[&](Patient *p){
-		this->AddPatient(p);
-	});
+	for(size_t i=0;i<source->Patients().size();i++){
+		AddPatient(new Patient(source->Patients()[i]->Name(),source->Patients()[i]->Code(),source->Patients()[i]->Age(),source->Patients()[i]->Gender(),source->Patients()[i]->Race(),source->Patients()[i]->Orientation()));
+	}
 	for_each(source->Groups().begin(),source->Groups().end(),[&](PatientGroup g){
-		this->CreateNewGroup(g.Code());
+		CreateNewGroup(g.Code());
 		for_each(g.Patients().begin(),g.Patients().end(),[&](Patient *gp){
-			this->AddPatientToGroup(gp->Code(),g.Code());
+			AddPatientToGroup(gp->Code(),g.Code());
 		});
 	});
 }
@@ -458,6 +458,7 @@ bool PList::readFromFile(string fp){
 
 	this->Clear();
 	this->Digest(p);
+	delete p;
 	return true;
 
 }
