@@ -5,3 +5,5 @@
 /*.dat
 /*.cfg
 ValgrindOut.xml
+*.depend
+Patient Encoder.depend
