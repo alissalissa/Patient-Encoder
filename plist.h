@@ -66,6 +66,8 @@ public:
 	//Creates/deletes new groups
 	void CreateNewGroup(string);
 	void DeleteGroup(string);
+	//Adopt data from a provided PList object
+	void Digest(PList*);
 
 	//Accessors -- accessed using a string code
 	PatientGroup &Group(string);

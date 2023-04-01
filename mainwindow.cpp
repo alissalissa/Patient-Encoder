@@ -111,7 +111,8 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	selected=-1;
 	fetchlp();
 	if(last_path!=""){
-		patients->readFromFile(last_path); // @todo (alissa#3#): Implement error handling
+		if(!patients->readFromFile(last_path))
+			cout<<"Error reading patients from the path specified in configuring file..."<<endl;
 		this->updateView();
 	}
 

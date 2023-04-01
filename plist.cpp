@@ -31,7 +31,8 @@ PList::PList(const PList& haystack){
 
 //Add/remove
 void PList::AddPatient(Patient *p){
-	patients.push_back(p);
+	Patient *np=new Patient(*p);
+	patients.push_back(np);
 	gen->update(p);
 }
 
@@ -135,6 +136,26 @@ PList *PList::operator=(PList haystack){
 	gen=haystack.AccessSuffixGenerator();
 	return this;
 
+}
+
+void PList::Digest(PList *source){
+	delete gen;
+	for_each(patients.begin(),patients.end(),[&](Patient *p){
+		delete p;
+	});
+	patients.clear();
+	groups.clear();
+
+	gen=new SuffixGenerator();
+	for_each(source->Patients().begin(),source->Patients().end(),[&](Patient *p){
+		this->AddPatient(p);
+	});
+	for_each(source->Groups().begin(),source->Groups().end(),[&](PatientGroup g){
+		this->CreateNewGroup(g.Code());
+		for_each(g.Patients().begin(),g.Patients().end(),[&](Patient *gp){
+			this->AddPatientToGroup(gp->Code(),g.Code());
+		});
+	});
 }
 
 /****************************END ACCESSORS*******************/
@@ -245,13 +266,7 @@ bool PList::printToFile(string fp){
 
 bool PList::readFromFile(string fp){
 
-    //cout<<"Entering readFromFile()"<<endl;
-
-    //Ensure that we're reading to an empty object
-    patients.clear();
-    groups.clear();
-    delete gen;
-    gen=new SuffixGenerator();
+	PList *p=new PList(new SuffixGenerator());
 
     //Open up the file from reading
 	fstream file;
@@ -264,6 +279,7 @@ bool PList::readFromFile(string fp){
 	char buffer='\0';
 	file.get(buffer);
 	if(buffer!=MAGIC_NUMBER){
+        delete p;
         file.close();
         return false;
     }
@@ -356,7 +372,7 @@ bool PList::readFromFile(string fp){
         string cbs(code_buffer);
         string nbs(name_buffer);
         //cout<<"Adding patient to PList object"<<endl;
-        this->AddPatient(new Patient(nbs,cbs,age_buffer,gender_buffer,race_buffer,orientation_buffer));
+        p->AddPatient(new Patient(nbs,cbs,age_buffer,gender_buffer,race_buffer,orientation_buffer));
         //cout<<"Patient added..."<<endl;
 
         free(code_buffer);
@@ -420,9 +436,9 @@ bool PList::readFromFile(string fp){
 			return false;
 		}
 		//All the codes are valid
-		this->CreateNewGroup(group_code);
+		p->CreateNewGroup(group_code);
 		for_each(gpcodes.begin(),gpcodes.end(),[&](string cotemp){
-			AddPatientToGroup(cotemp,group_code);
+			p->AddPatientToGroup(cotemp,group_code);
 		});
 
 		if(buffer!=END_GROUP){
@@ -438,8 +454,10 @@ bool PList::readFromFile(string fp){
 		file.close();
 		return false;
 	}
-
 	file.close();
+
+	this->Clear();
+	this->Digest(p);
 	return true;
 
 }
