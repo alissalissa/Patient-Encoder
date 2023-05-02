@@ -112,7 +112,7 @@ MainWindow::MainWindow( wxWindow* parent, wxWindowID id, const wxString& title, 
 	fetchlp();
 	if(last_path!=""){
 		if(!patients->readFromFile(last_path))
-			cout<<"Error reading patients from the path specified in configuring file..."<<endl;
+			cout<<"Error reading patients from the path specified in configuring file...\n"<<last_path<<endl;
 		this->updateView();
 	}
 
@@ -193,11 +193,11 @@ void MainWindow::updateView(void){
 	//Clear out the display
     patient_view->ClearAll();
     //Re-draw columns
-    patient_view->AppendColumn(wxT("Code"));
-    patient_view->AppendColumn(wxT("Name"));
-    patient_view->AppendColumn(wxT("Gender"));
-    patient_view->AppendColumn(wxT("Race"));
-    patient_view->AppendColumn(wxT("Orientation"));
+    patient_view->AppendColumn(wxT("Code"),wxLIST_FORMAT_LEFT,100);
+    patient_view->AppendColumn(wxT("Name"),wxLIST_FORMAT_LEFT,200);
+    patient_view->AppendColumn(wxT("Gender"),wxLIST_FORMAT_LEFT,100);
+    patient_view->AppendColumn(wxT("Race"),wxLIST_FORMAT_LEFT,100);
+    patient_view->AppendColumn(wxT("Orientation"),wxLIST_FORMAT_LEFT,100);
 
     //Get the search term if there is one
     string st=search_box->GetValue().ToStdString();
@@ -260,7 +260,10 @@ void MainWindow::updateView(void){
 //path config save and load
 bool MainWindow::savelp(string new_path){
 	//"~/.local/share/PatientEncoder/" guaranteed to exist on application load/implement (main.cpp)
-	fstream config("~/.local/share/PatientEncoder/pe.conf",ios_base::out);
+	string write_path="/home/";
+	write_path+=getenv("USER");
+	write_path+="/.local/share/PatientEncoder/pe.conf";
+	fstream config(write_path,ios_base::out);
 	if(!config.is_open()) return false;
 	try{
 		config<<"last_path="<<new_path;
@@ -288,10 +291,13 @@ bool MainWindow::fetchlp(void){
 	string conf_contents="";
 	char b='\0';
 	while(!conf_file.eof()){
-		conf_file.get(b);
-		conf_contents+=b;
+		b=conf_file.get();
+		cout<<b;
+		if(!conf_file.eof())
+			conf_contents+=b;
 	}
 	conf_file.close();
+	cout<<endl;
 
 	//Parse the path variable from the conf file
 	int cnt=char_count(conf_contents,'\n'); //cnt stands for count, not cunt ;)
@@ -340,12 +346,12 @@ void MainWindow::OnMenuNew(wxCommandEvent & event){
 	updateView();
 }
 
-void MainWindow::OnTest(wxCommandEvent &event){
+/*void MainWindow::OnTest(wxCommandEvent &event){
 	PWFetcher *f=new PWFetcher(TYPE_WX);
 	string pw=f->fetch();
 	delete f;
 	cout<<pw<<endl;
-}
+}*/
 
 void MainWindow::OnSelection(wxListEvent &event){
 	add_pt_grp_btn->Enable(true);

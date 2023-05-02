@@ -24,7 +24,7 @@
 #include "peutility.h"
 #include "plist.h"
 #include "suffix.h"
-#include "ses.h"
+//#include "ses.h"
 
 using namespace std;
 
@@ -71,7 +71,7 @@ private:
 	void SavePatientFile( wxCommandEvent& event );
 	void LoadPatientFile(wxCommandEvent & event);
 	void OnMenuNew(wxCommandEvent & event);
-	void OnTest(wxCommandEvent & event);
+	//void OnTest(wxCommandEvent & event);
 	void OnCloseWindowMenu( wxCommandEvent& event );
 	void OnSelection( wxListEvent& event ); //When a patient is selected
     void OnGroupSelection (wxCommandEvent& event);

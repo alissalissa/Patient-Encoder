@@ -60,6 +60,12 @@ public:
 	char &Orientation(void);
 	string &Name(void);
 	string &Code(void);
+	string get_name(void)const{return name;}
+	string get_code(void)const{return code;}
+	int get_age(void)const{return age;}
+	char get_gender(void)const{return gender;}
+	char get_race(void)const{return race;}
+	char get_orientation(void)const{return orientation;}
 
 	//Operators
 	Patient &operator=(Patient&);

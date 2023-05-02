@@ -31,9 +31,9 @@ PList::PList(const PList& haystack){
 
 //Add/remove
 void PList::AddPatient(Patient *p){
-	Patient *np=new Patient(*p);
+	Patient *np=new Patient(p->get_name(),p->get_code(),p->get_age(),p->get_gender(),p->get_race(),p->get_orientation());
 	patients.push_back(np);
-	gen->update(p);
+	gen->update(np);
 }
 
 void PList::AddPatientToGroup(Patient *p,PatientGroup &g){
@@ -149,6 +149,14 @@ void PList::Digest(PList *source){
 	gen=new SuffixGenerator();
 	for(size_t i=0;i<source->Patients().size();i++)
 		AddPatient(new Patient(source->Patients()[i]->Name(),source->Patients()[i]->Code(),source->Patients()[i]->Age(),source->Patients()[i]->Gender(),source->Patients()[i]->Race(),source->Patients()[i]->Orientation()));
+	/*if(!source->Patients().empty()){
+		//debug code
+		cout<<source->Patients().size()<<endl;
+		for_each(source->Patients().cbegin(),source->Patients().cend(),[&](Patient *p){
+			Patient *np=new Patient(p->get_name(),p->get_code(),p->get_age(),p->get_gender(),p->get_race(),p->get_orientation());
+			this->AddPatient(np);
+		});
+	}*/
 	for_each(source->Groups().begin(),source->Groups().end(),[&](PatientGroup g){
 		CreateNewGroup(g.Code());
 		for(size_t i=0;i<g.Patients().size();i++)
@@ -289,6 +297,7 @@ bool PList::readFromFile(string fp){
 		file.get(buffer);
 		if(buffer!=CODE){
 			file.close();
+			delete p;
 			return false;
 		}
 		size_t length=0;
@@ -304,6 +313,7 @@ bool PList::readFromFile(string fp){
         if(buffer!=NAME){
 			file.close();
 			free(code_buffer);
+			delete p;
 			return false;
         }
         //Get the length of the name
@@ -319,6 +329,7 @@ bool PList::readFromFile(string fp){
 			file.close();
 			free(code_buffer);
 			free(name_buffer);
+			delete p;
 			return false;
         }
         int age_buffer=-1;
@@ -331,6 +342,7 @@ bool PList::readFromFile(string fp){
 			file.close();
 			free(code_buffer);
 			free(name_buffer);
+			delete p;
 			return false;
         }
         char gender_buffer='\0';
@@ -342,6 +354,7 @@ bool PList::readFromFile(string fp){
             file.close();
             free(code_buffer);
             free(name_buffer);
+            delete p;
             return false;
         }
         char race_buffer='\0';
@@ -353,6 +366,7 @@ bool PList::readFromFile(string fp){
             file.close();
             free(code_buffer);
             free(name_buffer);
+            delete p;
             return false;
         }
         char orientation_buffer='\0';
@@ -364,6 +378,7 @@ bool PList::readFromFile(string fp){
             file.close();
             free(code_buffer);
             free(name_buffer);
+            delete p;
             return false;
         }
 

@@ -24,12 +24,12 @@ Patient::Patient(string n,string c,int a,char g,char r,char o){
 }
 
 Patient::Patient(const Patient &haystack){
-	name=haystack.name;
-	code=haystack.code;
-	age=haystack.age;
-	gender=haystack.gender;
-	race=haystack.race;
-	orientation=haystack.orientation;
+	name=haystack.get_name();
+	code=haystack.get_code();
+	age=haystack.get_age();
+	gender=haystack.get_gender();
+	race=haystack.get_race();
+	orientation=haystack.get_orientation();
 }
 /*********************END CONSTRUCTORS*********************/
 
