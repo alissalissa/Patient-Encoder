@@ -289,12 +289,11 @@ bool MainWindow::fetchlp(void){
 	fstream conf_file(p,ios_base::in);
 	if(!conf_file.is_open()) return false;
 	string conf_contents="";
-	char b='\0';
+	char b=conf_file.get();
 	while(!conf_file.eof()){
+		//cout<<b;
+		conf_contents+=b;
 		b=conf_file.get();
-		cout<<b;
-		if(!conf_file.eof())
-			conf_contents+=b;
 	}
 	conf_file.close();
 	cout<<endl;
